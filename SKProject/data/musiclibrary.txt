@@ -1,0 +1,27 @@
+﻿[
+  {
+    "title": "aaaa",
+    "artist": "aaaa",
+    "genre": "aaaa"
+  },
+  {
+    "title": "bbbb",
+    "artist": "bbbb",
+    "genre": "bbbb"
+  },
+  {
+    "title": "cccc",
+    "artist": "cccc",
+    "genre": "cccc"
+  },
+  {
+    "title": "ddddd",
+    "artist": "ddddd",
+    "genre": "ddddd, rap"
+  },
+  {
+    "title": "eeeee",
+    "artist": "eeeee",
+    "genre": "eeeee, indie"
+  }
+]
