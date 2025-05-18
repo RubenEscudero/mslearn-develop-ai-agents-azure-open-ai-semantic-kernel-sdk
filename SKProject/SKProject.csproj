@@ -12,4 +12,6 @@
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.2.0-alpha" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties prompts_4travelplugins_4getdestination_4config_1json__JsonSchema="json" /></VisualStudio></ProjectExtensions>
+
 </Project>

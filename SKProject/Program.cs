@@ -1,4 +1,5 @@
 ﻿using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Plugins.Core;
 
 /*
@@ -49,20 +50,59 @@ var kernel = builder.Build();
 /*
  * Ejemplo para obtener resultados en distintos idiomas bajo un contexto
  */
-string language = "French";
-string history = @"I'm traveling with my kids and one of them has a penaut allergy.";
+//string language = "French";
+//string history = @"I'm traveling with my kids and one of them has a penaut allergy.";
 
-string prompt = $@"You are a travel assistant. You are helpful, creative, and very friendly. 
-    Consider the traveler's background: ${history}
+//string input = @"I have a vacation from June 1 to July 22. I want to go to Greece. 
+//    I live in Chicago.";
 
-    Create a list of helpul phrases and words in ${language} a traveler would find useful.
+//string prompt = @$"
+//<message role=""system"">Instructions: Identify the from and to destinations 
+//and dates from the user's request</message>
 
-    Group phrases by category. Include common direction words. 
-    Display the phrases in the following format: 
-    Hello - Ciao [chow]
+//<message role=""user"">Can you give me a list of flights from Seattle to Tokyo? 
+//I want to travel from March 11 to March 18.</message>
 
-    Begin with: 'Here are some phrases in ${language} you may find helpful:' 
-    and end with: 'I hope this helps you on your trip!'";
+//<message role=""assistant"">Seattle|Tokyo|03/11/2024|03/18/2024</message>
 
-var result = await kernel.InvokePromptAsync(prompt);
+//<message role=""user"">${input}</message>";
+
+//var result = await kernel.InvokePromptAsync(prompt);
+//Console.WriteLine(result);
+
+/*
+ * Ejemplo de creación de un complemento semántico personalizado
+ */
+//var plugins = kernel.CreatePluginFromPromptDirectory("D:\\Proyectos\\mslearn-develop-ai-agents-azure-open-ai-semantic-kernel-sdk\\SKProject\\Prompts\\");
+//string input = "G, C";
+
+//var result = await kernel.InvokeAsync(
+//    plugins["SuggestChords"],
+//    new() {{ "startingChords" , input }});
+
+//Console.WriteLine(result);
+
+/*
+ * Ejemplo de crear varios complementos semánticos
+ */
+var prompts = kernel.ImportPluginFromPromptDirectory("D:\\Proyectos\\mslearn-develop-ai-agents-azure-open-ai-semantic-kernel-sdk\\SKProject\\Prompts\\TravelPlugins\\");
+
+ChatHistory history = [];
+string input = @"I'm planning an anniversary trip with my spouse. We like hiking, 
+    mountains, and beaches. Our travel budget is $15000";
+
+var result = await kernel.InvokeAsync<string>(prompts["SuggestDestinations"],
+    new() { { "input", input} });
+
+Console.WriteLine(result);
+history.AddUserMessage(input);
+history.AddAssistantMessage(result);
+
+Console.WriteLine("Where would you like to go?");
+input = Console.ReadLine();
+
+result = await kernel.InvokeAsync<string>(prompts["SuggestActivities"],
+    new() { { "history", history },
+        { "destination", input} });
+
 Console.WriteLine(result);
